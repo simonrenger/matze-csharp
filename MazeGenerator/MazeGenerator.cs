@@ -22,7 +22,10 @@ namespace Matze
 
         public MazeGenerator()
         {
-            seed = new System.DateTime().Millisecond;
+            var now = DateTime.Now;
+            var begin = new DateTime(1970,1,1);
+            var time = now.Subtract(begin);
+            seed = (int)time.TotalSeconds;
             random = new Random(seed);
             algorithms = new AlogrithmDict();
         }

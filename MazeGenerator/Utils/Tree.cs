@@ -6,22 +6,19 @@ using System.Threading.Tasks;
 
 namespace Matze.Utils
 {
-    class Tree
+    class Tree 
     {
-        public Tree root = null;
+        public Tree parent = null;
+        public Tree root => (parent != null)? parent.root : this;
 
-        public Tree()
+        public bool IsConnected(Tree tree)
         {
-            root = this;
-        }
-        public bool IsConnected(ref Tree tree)
-        {
-            return tree.root == this;
+            return root == tree.root;
         }
 
-        public void Connect(ref Tree tree)
+        public void Connect(Tree tree)
         {
-            root = tree.root;
+            tree.root.parent = this;
         }
     }
 }

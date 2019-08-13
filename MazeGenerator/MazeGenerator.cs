@@ -8,7 +8,7 @@ using Matze.Algorithms;
 using Matze.Utils;
 using AlogrithmDict = System.Collections.Generic.Dictionary<System.Type, Generate>;
 
-delegate BitGrid Generate(int seed, int width, int hight);
+delegate BitGrid Generate(Random rand, int width, int hight);
 
 
 namespace Matze
@@ -17,23 +17,29 @@ namespace Matze
     {
 
         private int seed;
+        private Random random;
         private AlogrithmDict algorithms;
 
         public MazeGenerator()
         {
             seed = new System.DateTime().Millisecond;
+            random = new Random(seed);
             algorithms = new AlogrithmDict();
         }
 
         public MazeGenerator(int seed)
         {
             this.seed = seed;
-            algorithms = new AlogrithmDict();
+            this.random = new Random(seed);
+            this.algorithms = new AlogrithmDict();
         }
 
         public int Seed
         {
-            set => this.seed = value;
+            set {
+                this.seed = value;
+                this.random = new Random(value);
+            }
             get => seed;
         }
 
@@ -48,8 +54,7 @@ namespace Matze
             if (method != null)
             {
                 var del = (Generate)Delegate.CreateDelegate(typeof(Generate), method);
-                algorithms.Add(type, del
-                   );
+                algorithms.Add(type, del);
                 return true;
             }
             else
@@ -57,12 +62,15 @@ namespace Matze
                 return false;
             }
         }
-
+        /**
+         * @brief The function which shall be executed from the outside to invoke the actual algorithm
+         * @return This function returns a Grid based in IGrid.
+         */
         public R Run<T,R>(int width = 10, int height = 10) 
             where T : Algorithm
             where R : IGrid
         {
-            return (R) Convert.ChangeType(algorithms[typeof(T)].Invoke(seed,width,width),typeof(R));
+            return (R) Convert.ChangeType(algorithms[typeof(T)].Invoke(random,width,width),typeof(R));
         }
     }
 }

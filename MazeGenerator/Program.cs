@@ -16,10 +16,10 @@ namespace Matze
             MazeGenerator mazeGenerator = new MazeGenerator(42);
             mazeGenerator.Add<Algorithms.RecursiveBacktracking>();
             mazeGenerator.Add<Algorithms.KruskalRandomized>();
-            //var grid = mazeGenerator.Run<Algorithms.RecursiveBacktracking,BitGrid>(100,100);
-            BitGrid gird = mazeGenerator.Run<Algorithms.KruskalRandomized,BitGrid>(10, 10);
-            gird.Print();
-            Console.ReadKey();
+            //var grid = mazeGenerator.Run<Algorithms.RecursiveBacktracking,BitGrid>(10,10);
+            var grid = mazeGenerator.Run<Algorithms.KruskalRandomized,BitGrid>(10, 10);
+            grid.Print();
+            //Console.ReadKey();
         }
     }
 }

@@ -7,14 +7,12 @@ namespace Matze.Algorithms
 
     class RecursiveBacktracking : Algorithm
     {
-        private static Random rand;
-        public static BitGrid Generate(int seed, int width, int height)
+        public static BitGrid Generate(Random rand, int width, int height)
         {
-            rand = new Random(seed);
             BitGrid bitGrid = new BitGrid(width, height);
-            return Generator(0, 0, ref bitGrid);
+            return Generator(0, 0, ref bitGrid,ref rand);
         }
-        private static ref BitGrid Generator(int x, int y, ref BitGrid bitGrid)
+        private static ref BitGrid Generator(int x, int y, ref BitGrid bitGrid,ref Random rand)
         {
             Directions[] directions_ = new Directions[] { Directions.E, Directions.N, Directions.S, Directions.W };
             directions_.Shuffle(ref rand);
@@ -30,7 +28,7 @@ namespace Matze.Algorithms
                 {
                     bitGrid[y][x] |= (int)direction;
                     bitGrid[ny][nx] |= (int)oppositeDirections[direction];
-                    Generator(nx, ny, ref bitGrid);
+                    Generator(nx, ny, ref bitGrid,ref rand);
                 }
             }
 

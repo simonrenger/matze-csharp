@@ -23,7 +23,7 @@ namespace Matze.Utils
             }
         }
 
-        public List<int>this[int index]
+        public List<int> this[int index]
         {
             get { return grid[index]; }
         }
@@ -39,6 +39,10 @@ namespace Matze.Utils
         public int Height
         {
             get { return grid.Count; }
+        }
+
+        public int Size(){
+            return grid.Size();
         }
 
         public void Print()

@@ -11,10 +11,8 @@ namespace Matze.Algorithms
 {
     class KruskalRandomized : Algorithm
     {
-        private static Random rand;
-        public static BitGrid Generate(int seed, int width, int height)
+         public static BitGrid Generate(Random rand, int width, int height)
         {
-            rand = new Random(seed);
             BitGrid bitGrid = new BitGrid(width, height);
             // fill sets:
             List<List<Tree>> sets = new List<List<Tree>>();
@@ -29,11 +27,11 @@ namespace Matze.Algorithms
                 }
             }
             // create edges
-            Generator(ref bitGrid,ref sets,ref edges);
+            Generator(ref bitGrid,ref sets,ref edges,ref rand);
 
             return bitGrid;
         }
-        private static void Generator(ref BitGrid bitGrid,ref List<List<Tree>> sets, ref List<int[]> edges)
+        private static void Generator(ref BitGrid bitGrid,ref List<List<Tree>> sets, ref List<int[]> edges,ref Random rand)
         {
             edges.Shuffle(ref rand);
             while (edges.Count != 0)
@@ -46,15 +44,12 @@ namespace Matze.Algorithms
                 var ny = y + directions[direction][1];
                 var set1 = sets[y][x];
                 var set2 = sets[ny][nx];
-                if (!set1.IsConnected(ref set2))
+                if (!set1.IsConnected(set2))
                 {
-                    set1.Connect(ref set2);
+                    set1.Connect(set2);
                     bitGrid[y][x] |= (int) direction;
                     bitGrid[ny][nx] |= (int) oppositeDirections[direction];
                 }
-                bitGrid.Print();
-                System.Threading.Thread.Sleep(100);
-                Console.Clear();
             }
         }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using Matze.Algorithms;
 using Matze.Utils;
 using AlogrithmDict = System.Collections.Generic.Dictionary<System.Type, Generate>;
@@ -23,7 +24,7 @@ namespace Matze
         public MazeGenerator()
         {
             var now = DateTime.Now;
-            var begin = new DateTime(1970,1,1);
+            var begin = new DateTime(1970, 1, 1);
             var time = now.Subtract(begin);
             seed = (int)time.TotalSeconds;
             random = new Random(seed);
@@ -39,7 +40,8 @@ namespace Matze
 
         public int Seed
         {
-            set {
+            set
+            {
                 this.seed = value;
                 this.random = new Random(value);
             }
@@ -69,11 +71,29 @@ namespace Matze
          * @brief The function which shall be executed from the outside to invoke the actual algorithm
          * @return This function returns a Grid based in IGrid.
          */
-        public R Run<T,R>(int width = 10, int height = 10) 
+        public R Run<T, R>(int width = 10, int height = 10)
             where T : Algorithm
             where R : IGrid
         {
-            return (R) Convert.ChangeType(algorithms[typeof(T)].Invoke(random,width,width),typeof(R));
+            return (R)Convert.ChangeType(algorithms[typeof(T)].Invoke(random, width, width), typeof(R));
+        }
+
+        public static void WriteGridToDisk(BitGrid grid, string file = "grid.txt")
+        {
+            using (var writer = new StreamWriter(file))
+            {
+                writer.WriteLine("\n");
+                for (int y = 0; y <= grid.Size(); y++)
+                {
+                    string line = "| ";
+                    for (int x = 0; x <= grid.Size(); x++)
+                    {
+                        line += ((grid[y][x] < 10) ? " " : "") + grid[y][x] + " | ";
+                    }
+                    writer.WriteLine(line);
+                }
+                writer.WriteLine("\n");
+            }
         }
     }
 }

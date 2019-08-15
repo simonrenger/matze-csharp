@@ -10,7 +10,7 @@ namespace Matze.Utils
     class BitGrid : IGrid
     {
         private List<List<int>> grid;
-        public BitGrid(int width,int height)
+        public BitGrid(int width, int height)
         {
             grid = new List<List<int>>();
             for (int i = 0; i < height; i++)
@@ -41,10 +41,25 @@ namespace Matze.Utils
             get { return grid.Count; }
         }
 
-        public int Size(){
+        public int Size()
+        {
             return grid.Size();
         }
 
+        public void PrintBits()
+        {
+            Console.Write("\n");
+            for (int y = 0; y <= grid.Size(); y++)
+            {
+                string line = "| ";
+                for (int x = 0; x <= grid.Size(); x++)
+                {
+                    line += ((grid[y][x] < 10) ? " " : "") + grid[y][x] + " | ";
+                }
+                Console.WriteLine(line);
+            }
+            Console.Write("\n");
+        }
         public void Print()
         {
             Console.Write(" ");
@@ -59,20 +74,15 @@ namespace Matze.Utils
                 string line = "|";
                 for (int x = 0; x <= grid.Size(); x++)
                 {
-                    line +=
-                        ((grid[y][x] & (int)Directions.S) != 0) ? " " : "_"
-                        ;
+                    line +=((grid[y][x] & (int)Directions.S) != 0) ? " " : "_";
                     if ((grid[y][x] & (int)Directions.E) != 0)
                     {
-                        line +=
-                            (((grid[y][x] | grid[y][x + 1]) & (int)Directions.S) != 0) ? " " : "_"
-                            ;
+                        line +=(((grid[y][x] | grid[y][x + 1]) & (int)Directions.S) != 0) ? " " : "_";
                     }
                     else
                     {
                         line += "|";
                     }
-
                 }
                 Console.WriteLine(line);
             }

@@ -60,31 +60,70 @@ namespace Matze.Utils
             }
             Console.Write("\n");
         }
+        public struct Cell
+        {
+            public bool east;
+            public bool west;
+            public bool south;
+            public bool north;
+            public Cell(bool north, bool east, bool south, bool west)
+            {
+                this.east = east;
+                this.west = west;
+                this.north = north;
+                this.south = south;
+            }
+        }
         public void Print()
         {
-            Console.Write(" ");
-            for (int i = 0; i < (grid.Size() * 2); i++)
+
+            Action<int,int> DrawLine = (int y, int max) =>
             {
-                Console.Write("_");
-            }
+                var line = "";
+                for (int x = 0; x <= max; x++)
+                {
+                    line += "###";
+                }
+                line += "##";
+                Console.WriteLine(line);
+            };
 
             Console.Write("\n");
             for (int y = 0; y <= grid.Size(); y++)
             {
-                string line = "|";
+                if(y == 0){
+                    DrawLine(y, grid.Size());
+                }
+                string line = "#";
                 for (int x = 0; x <= grid.Size(); x++)
                 {
-                    line +=((grid[y][x] & (int)Directions.S) != 0) ? " " : "_";
-                    if ((grid[y][x] & (int)Directions.E) != 0)
+                    var cell = "|_|";
+                    var isEmpty = grid[y][x] == 0;
+                    var hasNoWallNorth = (grid[y][x] & (int)Directions.N) != 0;
+                    var hasNoWallEast = (grid[y][x] & (int)Directions.E) != 0;
+                    var hasNoWallSouth = (grid[y][x] & (int)Directions.S) != 0;
+                    var hasNoWallWest = (grid[y][x] & (int)Directions.W) != 0;
+                    //cell: |_|
+                    if (hasNoWallWest)
                     {
-                        line +=(((grid[y][x] | grid[y][x + 1]) & (int)Directions.S) != 0) ? " " : "_";
+                        cell = cell.ReplaceAt(0, '.');
+
                     }
-                    else
+                    if (hasNoWallEast)
                     {
-                        line += "|";
+                        cell = cell.ReplaceAt(2, '.');
                     }
+                    if (hasNoWallSouth)
+                    {
+                        cell = cell.ReplaceAt(1, ' ');
+                    }
+                    line += cell;
                 }
+                line += "#";
                 Console.WriteLine(line);
+                if(y == grid.Size()){
+                    DrawLine(y, grid.Size());
+                }
             }
         }
     }

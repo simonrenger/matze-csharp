@@ -159,6 +159,10 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
+*/grids/*
+grid.txt
+grid_*.txt
+
 #bin and debug
 */bin/*
 #obj

@@ -44,7 +44,9 @@ if [ $# -eq 3 ]
     echo "... [amount of runs] ([Algorithm=KR] [WIDTH=10] [HEIGHT=10])"
     exit 1
 fi
+
 echo "You want to generate $1 mazes";
+
 echo -n "["
 for ((i = 1; i <= $1; i++));
   do 
@@ -59,7 +61,6 @@ for ((i = 1; i <= $1; i++));
             echo "Error: The Maze Generator had an error."
             exit 1;
         fi
-        # potentially, other code follows...
     done
     tput cup 5 $VAR;
     echo -n "# ]";

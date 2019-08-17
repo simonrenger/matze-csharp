@@ -75,5 +75,15 @@ namespace Matze
         {
             return algorithms[typeof(T)].Invoke(random, width, width);
         }
+        public BitGrid RunSafe<T>(int width = 10, int height = 10)
+            where T : Algorithm
+        {
+            if(algorithms.ContainsKey(typeof(T))){
+                return algorithms[typeof(T)].Invoke(random, width, width);
+            }else{
+                throw new System.Exception("The Requested Algorithm was not added to the known Algorithms");
+            }
+        }
+
     }
 }

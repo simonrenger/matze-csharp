@@ -101,7 +101,7 @@ namespace Matze.Utils
         public static void ToDisk(BitGrid grid, string file = "grid.txt")
         {
 
-            if (File.Exists(file) && alwaysNewFile)
+            if (File.Exists(file))
             {
                 File.Delete(file);
             }

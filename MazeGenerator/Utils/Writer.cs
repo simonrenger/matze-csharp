@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using Matze.Algorithms;
 
 namespace Matze.Utils
@@ -8,26 +9,20 @@ namespace Matze.Utils
     {
         public static void BitsToConsole(BitGrid grid)
         {
-            Console.Write("\n");
-            for (int y = 0; y <= grid.Size(); y++)
-            {
-                string line = "| ";
-                for (int x = 0; x <= grid.Size(); x++)
-                {
-                    line += ((grid[y][x] < 10) ? " " : "") + grid[y][x] + " | ";
-                }
-                Console.WriteLine(line);
-            }
-            Console.Write("\n");
+            WriteBitsTo(grid, System.Console.OpenStandardOutput());
         }
         public static void ToConsole(BitGrid grid)
         {
-            Console.Write("\n");
+            WriteGridTo(grid, System.Console.OpenStandardOutput());
+        }
+        public static void WriteGridTo(BitGrid grid, Stream stream)
+        {
+            Write(stream, "\n");
             for (int y = 0; y <= grid.Size(); y++)
             {
                 if (y == 0)
                 {
-                    DrawLine(y, grid.Size());
+                    Write(stream, CreateLine(y, grid.Size()) + "\n");
                 }
                 string line = "#";
                 for (int x = 0; x <= grid.Size(); x++)
@@ -54,14 +49,38 @@ namespace Matze.Utils
                     line += cell;
                 }
                 line += "#";
-                Console.WriteLine(line);
+                Write(stream, line + "\n");
                 if (y == grid.Size())
                 {
-                    DrawLine(y, grid.Size());
+                    Write(stream, CreateLine(y, grid.Size()) + "\n");
                 }
             }
         }
-        private static void DrawLine(int y, int max)
+        public static void WriteBitsTo(BitGrid grid, Stream stream)
+        {
+            Write(stream, "\n");
+            for (int y = 0; y <= grid.Size(); y++)
+            {
+                string line = "| ";
+                for (int x = 0; x <= grid.Size(); x++)
+                {
+                    line += ((grid[y][x] < 10) ? " " : "") + grid[y][x] + " | ";
+                }
+                Write(stream, line + "\n");
+            }
+            Write(stream, "\n");
+        }
+        private static void Write(Stream stream, string str)
+        {
+            var bytes = Encoding.ASCII.GetBytes(str);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        private static void WriteLine(Stream stream, string str)
+        {
+            var bytes = Encoding.ASCII.GetBytes(str + "\n");
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        private static string CreateLine(int y, int max)
         {
             var line = "";
             for (int x = 0; x <= max; x++)
@@ -69,7 +88,7 @@ namespace Matze.Utils
                 line += "###";
             }
             line += "##";
-            Console.WriteLine(line);
+            return line;
         }
         private static string CarveWay(bool condition, int index, char element, string cell)
         {
@@ -81,19 +100,16 @@ namespace Matze.Utils
         }
         public static void ToDisk(BitGrid grid, string file = "grid.txt")
         {
-            using (var writer = new StreamWriter(file))
+
+            if (File.Exists(file) && alwaysNewFile)
             {
-                writer.WriteLine("\n");
-                for (int y = 0; y <= grid.Size(); y++)
-                {
-                    string line = "| ";
-                    for (int x = 0; x <= grid.Size(); x++)
-                    {
-                        line += ((grid[y][x] < 10) ? " " : "") + grid[y][x] + " | ";
-                    }
-                    writer.WriteLine(line);
-                }
-                writer.WriteLine("\n");
+                File.Delete(file);
+            }
+
+            using (FileStream stream = File.Create(file))
+            {
+                WriteBitsTo(grid, stream);
+                WriteGridTo(grid, stream);
             }
         }
     }

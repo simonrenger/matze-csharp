@@ -31,5 +31,11 @@ namespace Matze.Algorithms
             {Algorithms.Directions.N, Algorithms.Directions.S},
             {Algorithms.Directions.S, Algorithms.Directions.N}
         };
+
+        protected static int E => (int)Directions.E;
+        protected static int S => (int)Directions.S;
+        protected static int N => (int)Directions.N;
+        protected static int W => (int)Directions.W;
+
     }
 }

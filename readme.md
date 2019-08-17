@@ -16,6 +16,8 @@ Besides those components the library has some utilities to make working with it 
 - A writer class which allows to write the generated grid to any provided (if provided) stream
 - A command line tool to run the library and test it. [More information at its repository](#) 
 
+This project supports .Net Framework 4.x and was mainly developed with .netcore 2.2
+
 ## Algorithms
 
 - Recursive Backtracking
@@ -43,3 +45,26 @@ Writer.ToDisk(grid, file);
 
 ## API
 
+`namespace Matze`:
+
+```csharp
+    class MazeGenerator
+    {
+        public MazeGenerator();
+        public MazeGenerator(int seed);
+        public bool Add<T>() where T : Algorithm;
+        public BitGrid Run<T>(int width = 10, int height = 10);
+    }      
+```
+
+*Constructor(s)*
+
+If no seed is provided the current time step is the seed.
+
+`MazeGenerator.Add<T>()`
+
+Added a given algorithm which is driven from the `abstract class Algorithm` to the list of possible Algorithms.
+
+`BitGrid MazeGenerator.Run<T>(int width = 10, int height = 10)`
+
+Will generate a `BitGrid`  based on the provided `T` algorithm with the given size;

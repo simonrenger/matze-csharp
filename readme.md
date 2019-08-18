@@ -14,6 +14,7 @@ The library consist out of two (main) components:
 Besides those components the library has some utilities to make working with it easier:
 
 - A writer class which allows to write the generated grid to any provided (if provided) stream
+- A exporter class which allows to export the generated grid to binary (see specifications below), json or yaml or toml or txt (see specifications)
 - A command line tool to run the library and test it. [More information at its repository](#) 
 
 This project supports .Net Framework 4.x and was mainly developed with .netcore 2.2
@@ -45,7 +46,7 @@ Writer.ToDisk(grid, file);
 
 ## API
 
-`namespace Matze`:
+### `namespace Matze`:
 
 ```csharp
     class MazeGenerator
@@ -53,6 +54,7 @@ Writer.ToDisk(grid, file);
         public MazeGenerator();
         public MazeGenerator(int seed);
         public bool Add<T>() where T : Algorithm;
+        public bool Remove<T>() where T : Algorithm;
         public BitGrid Run<T>(int width = 10, int height = 10);
     }      
 ```
@@ -65,6 +67,122 @@ If no seed is provided the current time step is the seed.
 
 Added a given algorithm which is driven from the `abstract class Algorithm` to the list of possible Algorithms.
 
+`MazeGenerator.Remove<T>()`
+
+Removes a provided algorithm from the Directory. 
+
 `BitGrid MazeGenerator.Run<T>(int width = 10, int height = 10)`
 
 Will generate a `BitGrid`  based on the provided `T` algorithm with the given size;
+
+***
+
+### `namespace Matze.Algorithms`
+
+The home of all the supported algorithms. All algorithms **must** inherit from the `abstract class Algorithm` . In order to guarantee the same Interface all Algorithms must provide the `static method`:
+
+```csharp
+BitGrid Generate(Random rand, int width, int hight);
+```
+
+***Side Note:*** If you want to extend the library with your own Algorithm just inherit from `Algorithm` and provide a static `BitGrid Generate(Random rand, int width, int hight);` method and the Maze Generator class understand it and can use it.
+
+```csharp
+    abstract class Algorithm
+    {
+        protected static Dictionary<Directions, int[]> directions;
+        protected static Dictionary<Directions, Directions> oppositeDirections;
+        protected static int E => (int)Directions.E;
+        protected static int S => (int)Directions.S;
+        protected static int N => (int)Directions.N;
+        protected static int W => (int)Directions.W;
+    }
+```
+
+`Dictionary<Directions, int[]> directions`
+
+Contains the *Key* *Value* pairs of the translation of the Directions Enum to integers.
+
+`Dictionary<Directions, Directions> oppositeDirections`
+
+Contains the opposite direction of the given direction.
+
+*Properties*
+
+The properties are just there for connivance.
+
+### Algorithms
+
+- `Algorithms.RecursiveBacktracking`
+- `Algorithms.KruskalRandomized`
+- `Algorithms.Eller`
+- `Algorithms.Prim`
+
+### `namespace Matze.Utils`
+
+```csharp
+ class BitGrid
+ {
+    public BitGrid(int width, int height);
+    public List<int> this[int index];
+    public int Width;
+    public int Height;
+ }
+```
+
+*Constructor(s)*
+
+creates a grid with the provided size (width and height). The base value of all cells is 0.
+
+`BitGrid.[int index]`
+
+Returns the underlying list element which allows easy access to the grid.
+
+*example:*
+
+```csharp
+var hasNoWallNorth = (grid[y][x] & (int)Directions.N) != 0;
+```
+
+*Properties*
+
+`BitGrid.Width` 
+
+Returns the size of the underlying Width List. (This is equal to the `width` variable provided in the constructor)
+
+`BitGrid.Height` 
+
+Returns the size of the underlying Width List. (This is equal to the `height` variable provided in the constructor)
+
+
+
+```csharp
+class Writer
+{
+    public static void BitsToConsole(BitGrid grid);
+    public static void ToConsole(BitGrid grid);
+    public static void WriteGridTo(BitGrid grid, Stream stream);
+    public static void WriteBitsTo(BitGrid grid, Stream stream);
+    public static void ToDisk(BitGrid grid, string file = "grid.txt");
+}
+```
+
+`Writer.BitsToConsole`
+
+Writes the bits of the grid to the `System.Console.OpenStandardOutput()` stream. (Calls`Writer.WriteBitsTo`)
+
+`Writer.ToConsole`
+
+Writes grid in ASCII representation to the `System.Console.OpenStandardOutput()` stream. (Calls`Writer.WriteGridTo`)
+
+`Writer.WriteGridTo`
+
+Writes grid in ASCII representation to the provided stream.
+
+`Writer.WriteBitsTo`
+
+Writes the bits of the grid to the provided stream.
+
+`Writer.ToDisk`
+
+Writes the bits and the ASCII representation to the disk.

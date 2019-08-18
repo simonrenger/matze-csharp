@@ -87,7 +87,7 @@ The home of all the supported algorithms. All algorithms **must** inherit from t
 BitGrid Generate(Random rand, int width, int hight);
 ```
 
-***Side Note:*** If you want to extend the library with your own Algorithm just inherit from `Algorithm` and provide a static `BitGrid Generate(Random rand, int width, int hight);` method and the Maze Generator class understand it and can use it.
+> ***Side Note:*** If you want to extend the library with your own Algorithm just inherit from `Algorithm` and provide a static `BitGrid Generate(Random rand, int width, int hight);` method and the Maze Generator class understand it and can use it.
 
 ```csharp
     abstract class Algorithm
@@ -153,19 +153,19 @@ creates a grid with the provided size (width and height). The base value of all 
 
 Sets the given grid as the grid.
 
-**Warning:** No check will be done.
+> **Warning:** No check will be done.
 
 `public BitGrid(byte[][] bytes)`
 
 Generates a grid based on the provided bytes.
 
-**Warning:** If any of the provided bytes does not match any numeric value the generator could produce an Exception will be thrown.
+> **Warning:** If any of the provided bytes does not match any numeric value the generator could produce an Exception will be thrown.
 
 `public BitGrid(string source)`
 
 Will generate a grid based on the provided string. (see `ToString()` method for specification).
 
-**Warning:** If any number in the string does not match any numeric value the generator could produce an Exception will be thrown.
+> **Warning:** If any number in the string does not match any numeric value the generator could produce an Exception will be thrown.
 
 `BitGrid.[int index]`
 

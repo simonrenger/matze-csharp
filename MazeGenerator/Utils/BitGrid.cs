@@ -25,7 +25,7 @@ namespace Matze.Utils
 
         public BitGrid(List<List<int>> grid)
         {
-            this.grid = List<List<int>>;
+            this.grid = grid;
         }
         public BitGrid(byte[][] bytes)
         {

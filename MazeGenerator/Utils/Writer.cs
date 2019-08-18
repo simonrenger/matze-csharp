@@ -7,6 +7,15 @@ namespace Matze.Utils
 {
     class Writer
     {
+        public enum Format
+        {
+            Info = 2,
+            Yaml = 4,
+            Json = 6,
+            Txt = 8,
+            Csv = 16,
+            Binary = 32
+        }
         public static void BitsToConsole(BitGrid grid)
         {
             WriteBitsTo(grid, System.Console.OpenStandardOutput());
@@ -98,18 +107,74 @@ namespace Matze.Utils
             }
             return cell;
         }
-        public static void ToDisk(BitGrid grid, string file = "grid.txt")
+        private static void WriteToFile(string filename, Action<Stream> action)
         {
-
-            if (File.Exists(file))
+            if (File.Exists(filename)) { File.Delete(filename); }
+            using (FileStream stream = File.Create(filename))
             {
-                File.Delete(file);
+                action(stream);
+            }
+        }
+        public static void ToDisk(BitGrid grid,string file = "grid"){
+            ToDisk(grid,file);
+        }
+        public static void ToDisk(BitGrid grid,string file,Format format = Format.Info)
+        {
+            if ((format & Format.Info) != 0)
+            {
+                var filename = file + "_info.txt";
+                WriteToFile(filename, (Stream stream) =>
+                {
+                    WriteBitsTo(grid, stream);
+                    WriteGridTo(grid, stream);
+                });
+            }
+            if ((format & Format.Json) != 0)
+            {
+                var filename = file + ".json";
+                WriteToFile(filename, (Stream stream) =>
+                {
+                    Write(stream, Export.ToJSON(grid));
+                });
             }
 
-            using (FileStream stream = File.Create(file))
+            if ((format & Format.Txt) != 0)
             {
-                WriteBitsTo(grid, stream);
-                WriteGridTo(grid, stream);
+                var filename = file + ".txt";
+                WriteToFile(filename, (Stream stream) =>
+                {
+                    Write(stream, Export.ToString(grid));
+                });
+            }
+                       if ((format & Format.Txt) != 0)
+            {
+                var filename = file + ".csv";
+                WriteToFile(filename, (Stream stream) =>
+                {
+                    Write(stream, Export.ToString(grid));
+                });
+            }
+            if ((format & Format.Yaml) != 0)
+            {
+                var filename = file + ".yaml";
+                WriteToFile(filename, (Stream stream) =>
+                {
+                    Write(stream, Export.ToYAML(grid));
+                });
+            }
+            if ((format & Format.Binary) != 0)
+            {
+                var filename = file + ".bin";
+                if (File.Exists(filename)) { File.Delete(filename); }
+                using (BinaryWriter writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
+                {
+                    var byteGrid = Export.ToBytes(grid);
+                    writer.Write(grid.Width);
+                    writer.Write(grid.Height);
+                    foreach(var row in byteGrid){
+                        writer.Write(row);
+                    }
+                }
             }
         }
     }

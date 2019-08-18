@@ -15,7 +15,7 @@
                 "/consoleloggerparameters:NoSummary"
             ],
             "options": {
-                "cwd": "/home/simon/Projects/matze-csharp/MazeGenerator"
+                "cwd": "/home/simon/Projects/matze-csharp/"
             },
             "group": "build",
             "presentation": {

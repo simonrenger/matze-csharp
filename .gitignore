@@ -165,5 +165,7 @@ grid_*.txt
 
 #bin and debug
 */bin/*
+bin/*
 #obj
 */obj/*
+obj/*

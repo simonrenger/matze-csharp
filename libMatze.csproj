@@ -3,6 +3,8 @@
   <PropertyGroup>
     <OutputType>library</OutputType>
     <AssemblyName>libMatze</AssemblyName>
+    <OutputPath>bin/$(Configuration)/</OutputPath>
+    <IntermediateOutputPath>obj/$(Configuration)/</IntermediateOutputPath>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <BuildInParallel>true</BuildInParallel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

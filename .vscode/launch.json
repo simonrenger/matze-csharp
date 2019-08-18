@@ -27,7 +27,7 @@
             "WARNING16": "button at the bottom of this file.",
             "WARNING17": "*********************************************************************************",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp2.2/MazeGenerator.dll",
+            "program": "${workspaceFolder}/bin/Debug/netcoreapp2.2/libMatze.dll",
             "args": ["P","-db"],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",

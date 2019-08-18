@@ -46,7 +46,10 @@ namespace Matze
             }
             get => seed;
         }
-
+        public bool Remove<T>() where T : Algorithm {
+            var type = typeof(T);
+            return algorithms.Remove(type);
+        }
         public bool Add<T>() where T : Algorithm
         {
             var type = typeof(T);

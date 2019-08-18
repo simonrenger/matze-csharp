@@ -28,7 +28,7 @@
             "WARNING17": "*********************************************************************************",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/bin/Debug/netcoreapp2.2/MazeGenerator.dll",
-            "args": [],
+            "args": ["P","-db"],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "stopAtEntry": false

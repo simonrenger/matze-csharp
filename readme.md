@@ -77,6 +77,8 @@ Will generate a `BitGrid`  based on the provided `T` algorithm with the given si
 
 ***
 
+
+
 ### `namespace Matze.Algorithms`
 
 The home of all the supported algorithms. All algorithms **must** inherit from the `abstract class Algorithm` . In order to guarantee the same Interface all Algorithms must provide the `static method`:
@@ -118,13 +120,24 @@ The properties are just there for connivance.
 - `Algorithms.Eller`
 - `Algorithms.Prim`
 
+
+
+***
+
+
+
 ### `namespace Matze.Utils`
 
 ```csharp
  class BitGrid
  {
     public BitGrid(int width, int height);
+    public BitGrid(List<List<int>> grid);
+    public BitGrid(byte[][] bytes);
+    public BitGrid(string source);
     public List<int> this[int index];
+    public byte[][] ToBytes();
+    public string ToString(bool newLine = true);
     public int Width;
     public int Height;
  }
@@ -132,7 +145,27 @@ The properties are just there for connivance.
 
 *Constructor(s)*
 
+`public BitGrid(int width, int height);`
+
 creates a grid with the provided size (width and height). The base value of all cells is 0.
+
+`public BitGrid(List<List<int>> grid)`
+
+Sets the given grid as the grid.
+
+**Warning:** No check will be done.
+
+`public BitGrid(byte[][] bytes)`
+
+Generates a grid based on the provided bytes.
+
+**Warning:** If any of the provided bytes does not match any numeric value the generator could produce an Exception will be thrown.
+
+`public BitGrid(string source)`
+
+Will generate a grid based on the provided string. (see `ToString()` method for specification).
+
+**Warning:** If any number in the string does not match any numeric value the generator could produce an Exception will be thrown.
 
 `BitGrid.[int index]`
 
@@ -153,6 +186,28 @@ Returns the size of the underlying Width List. (This is equal to the `width` var
 `BitGrid.Height` 
 
 Returns the size of the underlying Width List. (This is equal to the `height` variable provided in the constructor)
+
+*Conversation Methods*
+
+`BitGrid.ToBytes`
+
+Exports the grid to a byte array.
+
+`BitGrid.ToString(bool newLine = true)`
+
+Will export the grid to an string in the format: 
+
+```
+[number];[number];[number]\n
+[number];[number];[number]\n
+[number];[number];[number]\n
+```
+
+Unless `newLine` is specified as `false` in that case the `\n` will be replaced with `|`
+
+``` 
+[number];[number];[number]|[number];[number];[number]|[number];[number];[number]|
+```
 
 
 

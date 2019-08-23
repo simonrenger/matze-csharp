@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Matze.Algorithms;
+using Matze.Utils;
 
-namespace Matze.Utils
+namespace Matze
 {
-    class BitGrid
+    public class BitGrid
     {
         private List<List<int>> grid;
         public BitGrid(int width, int height)

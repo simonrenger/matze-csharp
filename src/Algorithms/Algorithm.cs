@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Matze.Algorithms
 {
-    enum Directions
+    public enum Directions
     {
         N = 1,
         S = 2,
@@ -14,7 +14,7 @@ namespace Matze.Algorithms
         W = 8
     };
 
-    abstract class Algorithm
+    public abstract class Algorithm
     {
         protected static Dictionary<Directions, int[]> directions = new Dictionary<Directions, int[]>
         {

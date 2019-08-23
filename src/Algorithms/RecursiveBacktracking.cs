@@ -4,8 +4,7 @@ using Matze.Utils;
 
 namespace Matze.Algorithms
 {
-
-    class RecursiveBacktracking : Algorithm
+    public class RecursiveBacktracking : Algorithm
     {
         public static BitGrid Generate(Random rand, int width, int height)
         {

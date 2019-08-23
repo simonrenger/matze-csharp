@@ -9,7 +9,7 @@ using Matze.Utils;
 
 namespace Matze.Algorithms
 {
-    class KruskalRandomized : Algorithm
+    public class KruskalRandomized : Algorithm
     {
          public static BitGrid Generate(Random rand, int width, int height)
         {

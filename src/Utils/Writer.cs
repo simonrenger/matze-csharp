@@ -5,17 +5,8 @@ using Matze.Algorithms;
 
 namespace Matze.Utils
 {
-    class Writer
+    public class Writer
     {
-        public enum Format
-        {
-            Info = 2,
-            Yaml = 4,
-            Json = 6,
-            Txt = 8,
-            Csv = 16,
-            Binary = 32
-        }
         public static void BitsToConsole(BitGrid grid)
         {
             WriteBitsTo(grid, System.Console.OpenStandardOutput());
@@ -146,7 +137,7 @@ namespace Matze.Utils
                     Write(stream, Export.ToString(grid));
                 });
             }
-                       if ((format & Format.Txt) != 0)
+            if ((format & Format.Csv) != 0)
             {
                 var filename = file + ".csv";
                 WriteToFile(filename, (Stream stream) =>

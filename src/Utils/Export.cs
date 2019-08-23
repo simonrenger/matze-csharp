@@ -7,7 +7,7 @@ using Matze.Algorithms;
 
 namespace Matze.Utils
 {
-    class Export
+    public class Export
     {
         static public byte[][] ToBytes(BitGrid bitgrid)
         {

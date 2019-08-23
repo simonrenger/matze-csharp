@@ -5,15 +5,13 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Matze.Algorithms;
-using Matze.Utils;
+using Matze;
 using AlogrithmDict = System.Collections.Generic.Dictionary<System.Type, Generate>;
-
 delegate BitGrid Generate(Random rand, int width, int hight);
-
 
 namespace Matze
 {
-    class MazeGenerator
+    public class MazeGenerator
     {
 
         private int seed;
@@ -22,11 +20,6 @@ namespace Matze
 
         public MazeGenerator()
         {
-            var now = DateTime.Now;
-            var begin = new DateTime(1970, 1, 1);
-            var time = now.Subtract(begin);
-            seed = (int)time.TotalSeconds;
-            random = new Random(seed);
             algorithms = new AlogrithmDict();
         }
 
@@ -45,6 +38,13 @@ namespace Matze
                 this.random = new Random(value);
             }
             get => seed;
+        }
+
+        public static int GenerateSeed(){
+            var now = DateTime.Now;
+            var begin = new DateTime(1970, 1, 1);
+            var time = now.Subtract(begin);
+            return (int)time.TotalSeconds;
         }
         public bool Remove<T>() where T : Algorithm {
             var type = typeof(T);
@@ -69,6 +69,23 @@ namespace Matze
                 return false;
             }
         }
+        public bool Add(Type type){
+                MethodInfo method = type.GetMethod("Generate",
+                System.Reflection.BindingFlags.Static |
+                BindingFlags.Public
+            );
+            // see http://blogs.microsoft.co.il/bursteg/2006/11/15/invoke-a-static-generic-method-using-reflection/
+            if (method != null)
+            {
+                var del = (Generate)Delegate.CreateDelegate(typeof(Generate), method);
+                algorithms.Add(type, del);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         /**
          * @brief The function which shall be executed from the outside to invoke the actual algorithm
          * @return This function returns a Grid based in IGrid.
@@ -76,13 +93,16 @@ namespace Matze
         public BitGrid Run<T>(int width = 10, int height = 10)
             where T : Algorithm
         {
-            return algorithms[typeof(T)].Invoke(random, width, width);
+            return algorithms[typeof(T)].Invoke(random, width, height);
+        }
+        public BitGrid Run(Type algorithm,int width = 10,int height = 10){
+            return algorithms[algorithm].Invoke(random,width,height);
         }
         public BitGrid RunSafe<T>(int width = 10, int height = 10)
             where T : Algorithm
         {
             if(algorithms.ContainsKey(typeof(T))){
-                return algorithms[typeof(T)].Invoke(random, width, width);
+                return algorithms[typeof(T)].Invoke(random, width, height);
             }else{
                 throw new System.Exception("The Requested Algorithm was not added to the known Algorithms");
             }

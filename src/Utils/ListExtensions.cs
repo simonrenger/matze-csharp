@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Matze.Utils
 {
-    public static class ListExtensions
+    internal static class ListExtensions
     {
-        public static void Shuffle<T>(this IList<T> ts, ref Random rand)
+        internal static void Shuffle<T>(this IList<T> ts, ref Random rand)
         {
             var count = ts.Count;
             var last = count - 1;
@@ -20,7 +20,7 @@ namespace Matze.Utils
                 ts[r] = tmp;
             }
         }
-        public static T Pop<T>(this IList<T> ts)
+        internal static T Pop<T>(this IList<T> ts)
         {
             var pop = ts[ts.Size()];
             ts.RemoveAt(ts.Size());
@@ -29,12 +29,12 @@ namespace Matze.Utils
         /**
          * @brief Requests the Size of the List minus 1
          */
-        public static int Size<T>(this IList<T> ts)
+        internal static int Size<T>(this IList<T> ts)
         {
             return ts.Count - 1;
         }
         // Source https://stackoverflow.com/questions/2094239/swap-two-items-in-listt
-        public static void Swap<T>(IList<T> list, int indexA, int indexB)
+        internal static void Swap<T>(IList<T> list, int indexA, int indexB)
         {
             T tmp = list[indexA];
             list[indexA] = list[indexB];

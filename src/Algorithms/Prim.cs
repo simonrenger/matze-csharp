@@ -4,7 +4,7 @@ using Matze.Utils;
 
 namespace Matze.Algorithms
 {
-    class Prim : Algorithm
+    public class Prim : Algorithm
     {
 
         private const int Frontier = 32;

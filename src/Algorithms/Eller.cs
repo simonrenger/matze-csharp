@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Matze.Algorithms
 {
-    class Eller : Algorithm
+    public class Eller : Algorithm
     {
         public static BitGrid Generate(Random rand, int width, int height)
         {

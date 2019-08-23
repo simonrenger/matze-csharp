@@ -9,7 +9,7 @@ using Matze.Algorithms;
 
 namespace Matze.Utils
 {
-    class Import
+    public class Import
     {
         private static string ReadFile(string file)
         {
@@ -19,7 +19,7 @@ namespace Matze.Utils
                 string line;
                 while ((line = stream.ReadLine()) != null)
                 {
-                    export += line;
+                    export += line+"\n";
                 }
             }
             return export;
@@ -144,9 +144,9 @@ namespace Matze.Utils
                             throw new Exception("Error: String cannot e converted to cell because its not a correct numeric value the System could have generated!");
                         }
                     }
-                    catch
+                    catch(Exception e)
                     {
-                        throw new Exception("Error: String cannot e converted to cell because its not a numeric value");
+                        throw new Exception("Error: String cannot e converted to cell because its not a numeric value\n Message:"+e.Message);
                     }
                 }
             }

@@ -1,5 +1,7 @@
 # Matze
 
+![CI](https://travis-ci.com/simonrenger/matze-csharp.svg?token=qVi7zNCeA8wTViy22r3s&branch=netcore)
+
 **Matze** is a cross platform Maze Generation library. This library follows three basic principles:
 
 1. The library API should be easy to use

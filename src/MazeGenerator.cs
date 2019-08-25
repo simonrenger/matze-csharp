@@ -20,7 +20,9 @@ namespace Matze
 
         public MazeGenerator()
         {
-            algorithms = new AlogrithmDict();
+            this.seed = GenerateSeed();
+            this.random = new Random(this.seed);
+            this.algorithms = new AlogrithmDict();
         }
 
         public MazeGenerator(int seed)

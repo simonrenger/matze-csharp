@@ -76,6 +76,9 @@ namespace Matze
             var type = typeof(T);
             return algorithms.Remove(type);
         }
+        public bool Remove(Type type){
+            return algorithms.Remove(type);
+        }
         public bool Add<T>() where T : Algorithm
         {
             var type = typeof(T);

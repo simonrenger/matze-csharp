@@ -158,7 +158,7 @@ namespace Matze.Utils
                 var filename = file + ".txt";
                 WriteToFile(filename, (Stream stream) =>
                 {
-                    Write(stream, Export.ToString(grid));
+                    Write(stream, Export.ToString(grid,false));
                 });
             }
             if ((format & Format.Csv) != 0)

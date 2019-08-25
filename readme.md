@@ -16,10 +16,15 @@ The library consist out of two (main) components:
 Besides those components the library has some utilities to make working with it easier:
 
 - A writer class which allows to write the generated grid to any provided (if provided) stream
-- A exporter class which allows to export the generated grid to binary (see specifications below), json or yaml or toml or txt (see specifications)
-- A command line tool to run the library and test it. [More information at its repository](#) 
+- A exporter class which allows to export the generated grid to binary (see specifications below), json or yaml  or txt (see specifications)
+- A command line tool to run the library and test it. [More information at its repository](https://github.com/simonrenger/matze-csharp-cli) 
 
-This project supports .Net Framework 4.x and was mainly developed with .netcore 2.2
+This project supports **.Net Framework 4.x** and was mainly developed with **.netcore 2.2**
+
+### Dependencies
+
+- .Net Core 2.2
+- Newtonsoft.Json
 
 ## Algorithms
 
@@ -56,14 +61,17 @@ Writer.ToDisk(grid, file);
         public MazeGenerator();
         public MazeGenerator(int seed);
         public bool Add<T>() where T : Algorithm;
+        public bool Add(Type type);
         public bool Remove<T>() where T : Algorithm;
+        public bool Remove(Type type);
         public BitGrid Run<T>(int width = 10, int height = 10);
+        public BitGrid Run(Type algorithm,int width = 10,int height = 10);
     }      
 ```
 
 *Constructor(s)*
 
-If no seed is provided the current time step is the seed.
+If no seed is provided the current time-step is the seed.
 
 `MazeGenerator.Add<T>()`
 
@@ -76,6 +84,55 @@ Removes a provided algorithm from the Directory.
 `BitGrid MazeGenerator.Run<T>(int width = 10, int height = 10)`
 
 Will generate a `BitGrid`  based on the provided `T` algorithm with the given size;
+
+
+
+```csharp
+ class BitGrid
+ {
+    public BitGrid(int width, int height);
+    public BitGrid(List<List<int>> grid);
+    public BitGrid(byte[][] bytes);
+    public BitGrid(string source);
+    public List<int> this[int index];
+    public byte[][] ToBytes();
+    public string ToString(bool newLine = true);
+    public int Width;
+    public int Height;
+ }
+```
+
+*Constructor(s)*
+
+`public BitGrid(int width, int height);`
+
+creates a grid with the provided size (width and height). The base value of all cells is 0.
+
+`public BitGrid(List<List<int>> grid)`
+
+Sets the given grid as the grid.
+
+> **Warning:** No check will be done.
+
+`BitGrid.[int index]`
+
+Returns the underlying list element which allows easy access to the grid.
+
+*example:*
+
+```csharp
+var hasNoWallNorth = (grid[y][x] & (int)Directions.N) != 0;
+```
+
+*Properties*
+
+`BitGrid.Width` 
+
+Returns the size of the underlying Width List. (This is equal to the `width` variable provided in the constructor)
+
+`BitGrid.Height` 
+
+Returns the size of the underlying Width List. (This is equal to the `height` variable provided in the constructor)
 
 ***
 
@@ -131,96 +188,14 @@ The properties are just there for connivance.
 ### `namespace Matze.Utils`
 
 ```csharp
- class BitGrid
- {
-    public BitGrid(int width, int height);
-    public BitGrid(List<List<int>> grid);
-    public BitGrid(byte[][] bytes);
-    public BitGrid(string source);
-    public List<int> this[int index];
-    public byte[][] ToBytes();
-    public string ToString(bool newLine = true);
-    public int Width;
-    public int Height;
- }
-```
-
-*Constructor(s)*
-
-`public BitGrid(int width, int height);`
-
-creates a grid with the provided size (width and height). The base value of all cells is 0.
-
-`public BitGrid(List<List<int>> grid)`
-
-Sets the given grid as the grid.
-
-> **Warning:** No check will be done.
-
-`public BitGrid(byte[][] bytes)`
-
-Generates a grid based on the provided bytes.
-
-> **Warning:** If any of the provided bytes does not match any numeric value the generator could produce an Exception will be thrown.
-
-`public BitGrid(string source)`
-
-Will generate a grid based on the provided string. (see `ToString()` method for specification).
-
-> **Warning:** If any number in the string does not match any numeric value the generator could produce an Exception will be thrown.
-
-`BitGrid.[int index]`
-
-Returns the underlying list element which allows easy access to the grid.
-
-*example:*
-
-```csharp
-var hasNoWallNorth = (grid[y][x] & (int)Directions.N) != 0;
-```
-
-*Properties*
-
-`BitGrid.Width` 
-
-Returns the size of the underlying Width List. (This is equal to the `width` variable provided in the constructor)
-
-`BitGrid.Height` 
-
-Returns the size of the underlying Width List. (This is equal to the `height` variable provided in the constructor)
-
-*Conversation Methods*
-
-`BitGrid.ToBytes`
-
-Exports the grid to a byte array.
-
-`BitGrid.ToString(bool newLine = true)`
-
-Will export the grid to an string in the format: 
-
-```
-[number];[number];[number]\n
-[number];[number];[number]\n
-[number];[number];[number]\n
-```
-
-Unless `newLine` is specified as `false` in that case the `\n` will be replaced with `|`
-
-``` 
-[number];[number];[number]|[number];[number];[number]|[number];[number];[number]|
-```
-
-
-
-```csharp
 class Writer
 {
     public static void BitsToConsole(BitGrid grid);
     public static void ToConsole(BitGrid grid);
     public static void WriteGridTo(BitGrid grid, Stream stream);
     public static void WriteBitsTo(BitGrid grid, Stream stream);
-    public static void ToDisk(BitGrid grid, string file = "grid.txt");
+    public static void ToDisk(BitGrid grid,string file = "grid");
+    public static void ToDisk(BitGrid grid,string file,Format format = Format.Info);
 }
 ```
 
@@ -240,6 +215,145 @@ Writes grid in ASCII representation to the provided stream.
 
 Writes the bits of the grid to the provided stream.
 
-`Writer.ToDisk`
+`Writer.ToDisk(BitGrid grid,string file = "grid")`
 
-Writes the bits and the ASCII representation to the disk.
+Writes the bits and the ASCII representation to the disk and the basic information.
+
+`Writer.ToDisk(BitGrid grid,string file,Format format = Format.Info)`
+
+Writes depending on the `Format` how the information shall be exported.
+
+Possible format options:
+
+```csharp
+public enum Format
+{
+	Info,
+    Yaml,
+    Json,
+    Txt,
+    Csv,
+    Binary
+}
+```
+
+*Important:* `Txt` and `Csv` are similar. 
+
+*Specifications:*
+
+```
+Bit representation:
+|  2 |  4 |  4 | 10 |  4 |  4 | 10 | 10 |  4 | 10 | 
+|  3 |  2 |  6 |  9 |  2 |  2 |  3 |  7 |  8 |  3 | 
+|  3 |  7 |  9 |  6 |  9 |  7 |  9 |  3 |  6 |  9 | 
+|  7 |  9 |  2 |  7 |  8 |  7 |  8 |  7 |  9 |  2 | 
+|  3 |  6 |  9 |  3 |  2 |  7 |  8 |  7 |  8 |  3 | 
+|  3 |  3 |  6 |  9 |  3 |  3 |  2 |  7 |  8 |  3 | 
+|  3 |  3 |  3 |  6 |  9 |  3 |  7 |  9 |  6 |  9 | 
+|  3 |  7 |  9 |  7 |  8 |  3 |  3 |  6 |  9 |  2 | 
+|  3 |  3 |  2 |  3 |  6 |  9 |  3 |  3 |  2 |  3 | 
+|  5 |  5 |  5 |  5 |  5 |  4 |  5 |  5 |  5 |  9 | 
+
+ASCII:
+################################
+#| ||_.._.. ||_.._.. |. ||_.. |#
+#| || || .._|| || || || .._|| |#
+#| || .._|| .._|| .._|| || .._|#
+#| .._|| || .._|| .._|| .._|| |#
+#| || .._|| || || .._|| .._|| |#
+#| || || .._|| || || || .._|| |#
+#| || || || .._|| || .._|| .._|#
+#| || .._|| .._|| || || .._|| |#
+#| || || || || .._|| || || || |#
+#|_.._.._.._.._.._.._.._.._.._|#
+################################
+```
+
+
+
+**CSV**
+
+```
+[number];[number];[number]\n
+[number];[number];[number]\n
+[number];[number];[number]\n
+```
+
+
+
+**Txt**
+
+```
+[number];[number];[number]|
+[number];[number];[number]|
+[number];[number];[number]|
+```
+
+
+
+**json**
+
+```json
+[[15,12,39,...],[15,12,39,...],...]
+```
+
+
+
+**YAML**
+
+```yaml
+---
+- - 12
+  - 32
+  - 64
+- - 16
+  - 8
+  - 2
+[...]
+```
+
+
+
+**Binary:**
+
+```
+[WIDTH] : Int32
+[HEIGHT] : Int32
+[[Int32,...]],[[Int32,...]] ...
+```
+
+
+
+```csharp
+class Export{
+    static public byte[][] ToBytes(BitGrid bitgrid);
+    public static string ToString(BitGrid bitgrid,bool newLine = true);
+    public static string ToCSV(BitGrid bitgrid);
+    public static string ToJSON(BitGrid grid);
+    public static string ToYAML(BitGrid grid);
+}
+```
+
+Translates a given `BitGrid` to one of the above listed file formats.
+
+
+
+```csharp
+public class Import{
+    public static BitGrid ParseJSON(string json);
+    public static BitGrid ParseBytes(byte[][] bytes);
+    public static BitGrid ParseString(string source);
+    public static BitGrid ParseYAML(string yaml);
+    
+    public static BitGrid ParseAnyFile(string name);
+    public static BitGrid ParseJSONFile(string file);
+    public static BitGrid ParseCSVFile(string file);
+    public static BitGrid ParseBytesFile(string file);
+    public static BitGrid ParseYamlFile(string file);
+}
+```
+
+Will import from supported file formats an create a `BitGrid` based on it.
+
+> **IMPORTANT:** All methods will check the validity of the provided data if they are not valid they will throw and exception.
+

@@ -38,6 +38,7 @@ This project supports **.Net Framework 4.x** and was mainly developed with **.ne
 ```csharp
 ...
 int seed = 23123213213;
+string file = "grid";
 MazeGenerator mazeGenerator = new MazeGenerator(seed);
 mazeGenerator.Add<Algorithms.RecursiveBacktracking>();
 mazeGenerator.Add<Algorithms.KruskalRandomized>();
@@ -47,6 +48,10 @@ var grid = mazeGenerator.Run<Algorithms.RecursiveBacktracking>(width, height);
 Writer.BitsToConsole(grid);
 Writer.ToConsole(grid);
 Writer.ToDisk(grid, file);
+...
+var output = Export.ToJSON(grid);
+var newGrid = Import.ParseJson(output);
+Writer.ToDisk(newGrid, file,Format.Json);
 ```
 
 

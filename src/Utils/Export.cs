@@ -24,10 +24,12 @@ SOFTWARE.
 
 using System;
 using System.Text;
-using Newtonsoft.Json;
 using System.Linq;
 using System.Collections.Generic;
+
+using Newtonsoft.Json;
 using Matze.Algorithms;
+using Matze.Grids;
 
 namespace Matze.Utils
 {

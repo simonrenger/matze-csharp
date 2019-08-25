@@ -29,6 +29,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Matze.Algorithms;
+using Matze.Grids;
 using Matze;
 using AlogrithmDict = System.Collections.Generic.Dictionary<System.Type, Generate>;
 delegate BitGrid Generate(Random rand, int width, int hight);

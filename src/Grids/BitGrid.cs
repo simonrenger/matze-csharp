@@ -22,42 +22,61 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 **/
 
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Matze.Algorithms;
 using Matze.Utils;
-using Matze.Grids;
 
-namespace Matze.Algorithms
+namespace Matze.Grids
 {
-    public class RecursiveBacktracking : Algorithm
+    public class BitGrid
     {
-        public static BitGrid Generate(Random rand, int width, int height)
+        private List<List<int>> grid;
+        public BitGrid(int width, int height)
         {
-            BitGrid bitGrid = new BitGrid(width, height);
-            return Generator(0, 0, ref bitGrid,ref rand);
-        }
-        private static ref BitGrid Generator(int x, int y, ref BitGrid bitGrid,ref Random rand)
-        {
-            Directions[] directions_ = new Directions[] { Directions.E, Directions.N, Directions.S, Directions.W };
-            directions_.Shuffle(ref rand);
-            foreach (var direction in directions_)
+            grid = new List<List<int>>();
+            for (int i = 0; i < height; i++)
             {
-                var nx = x + directions[direction][0];
-                var ny = y + directions[direction][1];
-                if (
-                    ny >= 0 && ny <= bitGrid.Height - 1 &&
-                    nx >= 0 && nx <= bitGrid[ny].Size() &&
-                    bitGrid[ny][nx] == 0
-                )
+                grid.Add(new List<int>());
+                for (int j = 0; j < width; j++)
                 {
-                    bitGrid[y][x] |= (int)direction;
-                    bitGrid[ny][nx] |= (int)oppositeDirections[direction];
-                    Generator(nx, ny, ref bitGrid,ref rand);
+                    grid[i].Add(0);
                 }
             }
-
-            return ref bitGrid;
         }
-    }
 
+        internal BitGrid(List<List<int>> grid)
+        {
+            this.grid = grid;
+        }
+        public List<int> this[int index]
+        {
+            get { return grid[index]; }
+        }
+
+        public int Width
+        {
+            get
+            {
+                return grid[0].Count;
+            }
+        }
+
+        public int Height
+        {
+            get { return grid.Count; }
+        }
+
+        public int Size()
+        {
+            return grid.Size();
+        }
+
+        internal List<List<int>> Grid => grid;
+
+ 
+    }
 }

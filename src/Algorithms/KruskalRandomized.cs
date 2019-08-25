@@ -30,6 +30,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using Matze.Utils;
+using Matze.Grids;
 
 namespace Matze.Algorithms
 {

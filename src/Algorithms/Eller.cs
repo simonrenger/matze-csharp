@@ -23,10 +23,12 @@ SOFTWARE.
 **/
 
 using System;
-using Matze.Utils;
 using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
+
+using Matze.Utils;
+using Matze.Grids;
 
 namespace Matze.Algorithms
 {

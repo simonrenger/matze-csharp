@@ -26,10 +26,12 @@ using System;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
 using System.Linq;
 using System.Collections.Generic;
+
+using Newtonsoft.Json;
 using Matze.Algorithms;
+using Matze.Grids;
 
 namespace Matze.Utils
 {

@@ -25,7 +25,9 @@ SOFTWARE.
 using System;
 using System.IO;
 using System.Text;
+
 using Matze.Algorithms;
+using Matze.Grids;
 
 namespace Matze.Utils
 {

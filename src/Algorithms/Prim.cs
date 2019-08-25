@@ -25,6 +25,7 @@ SOFTWARE.
 using System;
 using System.Collections.Generic;
 using Matze.Utils;
+using Matze.Grids;
 
 namespace Matze.Algorithms
 {

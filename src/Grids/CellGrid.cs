@@ -1,4 +1,4 @@
-/**
+﻿﻿/**
 MIT License
 
 Copyright (c) 2019 Simon Renger
@@ -21,40 +21,42 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 **/
-
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Matze.Algorithms;
 using Matze.Utils;
 
-namespace Matze
+namespace Matze.Grids
 {
-    public class BitGrid
+    public class CellGrid
     {
-        private List<List<int>> grid;
-        public BitGrid(int width, int height)
+        private List<List<Cell>> grid;
+
+        public CellGrid(int width, int height)
         {
-            grid = new List<List<int>>();
+            grid = new List<List<Cell>>();
             for (int i = 0; i < height; i++)
             {
-                grid.Add(new List<int>());
+                grid.Add(new List<Cell>());
                 for (int j = 0; j < width; j++)
                 {
-                    grid[i].Add(0);
+                    grid[i].Add(new Cell());
                 }
             }
         }
 
-        internal BitGrid(List<List<int>> grid)
+        internal CellGrid(List<List<Cell>> grid)
         {
             this.grid = grid;
         }
-        public List<int> this[int index]
+
+        public List<Cell> this[int index]
         {
             get { return grid[index]; }
+        }
+
+        public int Height
+        {
+            get { return grid.Count; }
         }
 
         public int Width
@@ -65,26 +67,11 @@ namespace Matze
             }
         }
 
-        public int Height
-        {
-            get { return grid.Count; }
-        }
-
         public int Size()
         {
             return grid.Size();
         }
 
-        internal List<List<int>> Grid => grid;
-
-        public byte[][] ToBytes(){
-            return Export.ToBytes(this);
-        }
-        public string ToString(bool newLine = true){
-            return Export.ToString(this,newLine);
-        }
-        public string ToJSON(){
-            return Export.ToJSON(this);
-        }
+        internal List<List<Cell>> Grid => grid;
     }
 }

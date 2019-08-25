@@ -78,5 +78,21 @@ namespace Matze.Utils
             }
             return export;
         }
+    
+        public static string ToString(CellGrid grid,bool newline = true){
+            return ToString(GridConverter.ToBitGrid(grid),newline);
+        }
+        public static string ToCSV(CellGrid grid){
+            return ToCSV(GridConverter.ToBitGrid(grid));
+        }
+        public static string ToJSON(CellGrid grid){
+            return ToJSON(GridConverter.ToBitGrid(grid));
+        }
+        public static string ToYAML(CellGrid grid){
+            return ToYAML(GridConverter.ToBitGrid(grid));
+        }
+        public static byte[][] ToBytes(CellGrid grid){
+            return ToBytes(GridConverter.ToBitGrid(grid));
+        }
     }
 }

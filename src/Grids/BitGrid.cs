@@ -32,9 +32,8 @@ using Matze.Utils;
 
 namespace Matze.Grids
 {
-    public class BitGrid
+    public class BitGrid  : GridList<int>,IGrid
     {
-        private List<List<int>> grid;
         public BitGrid(int width, int height)
         {
             grid = new List<List<int>>();
@@ -52,31 +51,5 @@ namespace Matze.Grids
         {
             this.grid = grid;
         }
-        public List<int> this[int index]
-        {
-            get { return grid[index]; }
-        }
-
-        public int Width
-        {
-            get
-            {
-                return grid[0].Count;
-            }
-        }
-
-        public int Height
-        {
-            get { return grid.Count; }
-        }
-
-        public int Size()
-        {
-            return grid.Size();
-        }
-
-        internal List<List<int>> Grid => grid;
-
- 
     }
 }

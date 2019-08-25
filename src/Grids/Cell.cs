@@ -46,6 +46,10 @@ namespace Matze.Grids
             south = true;
         }
 
+        public Cell(int value){
+            this.UpdateViaBit(value);
+        }
+
         public bool North
         {
             set { north = value; }

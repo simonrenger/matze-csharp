@@ -27,9 +27,8 @@ using Matze.Utils;
 
 namespace Matze.Grids
 {
-    public class CellGrid
+    public class CellGrid : GridList<Cell>,IGrid
     {
-        private List<List<Cell>> grid;
 
         public CellGrid(int width, int height)
         {
@@ -49,29 +48,8 @@ namespace Matze.Grids
             this.grid = grid;
         }
 
-        public List<Cell> this[int index]
-        {
-            get { return grid[index]; }
+        internal CellGrid(List<List<int>> grid){
+            this.grid = GridConverter.BitsToCells(grid);
         }
-
-        public int Height
-        {
-            get { return grid.Count; }
-        }
-
-        public int Width
-        {
-            get
-            {
-                return grid[0].Count;
-            }
-        }
-
-        public int Size()
-        {
-            return grid.Size();
-        }
-
-        internal List<List<Cell>> Grid => grid;
     }
 }

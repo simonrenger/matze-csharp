@@ -246,6 +246,5 @@ namespace Matze.Utils
             var fileContent = ReadFile(file);
             return ParseYAML(fileContent);
         }
-
     }
 }

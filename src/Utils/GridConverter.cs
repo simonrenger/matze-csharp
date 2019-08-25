@@ -59,5 +59,15 @@ namespace Matze.Utils{
             }
             return grid;
         }
+
+        internal static List<List<Cell>> BitsToCells(List<List<int>> list){
+            List<List<Cell>> result = new List<List<Cell>>();
+            for(var row = 0;row < list.Count;row++){
+                for(var cell = 0;cell < list[row].Count;cell++){
+                    result[row].Add(new Cell(list[row][cell]));
+                }
+            }
+            return result;
+        }
     }
 }

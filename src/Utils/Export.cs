@@ -51,7 +51,15 @@ namespace Matze.Utils
             ASCII = 4,
             Bits = 8
         };
+        public static void WriteToFile(string file, CellGrid grid, Format format, bool appendFlag = false)
+        {
+            WriteToFile(file, GridConverter.Convert(grid), format, appendFlag);
+        }
 
+        public static void WriteToConsole(CellGrid grid, DisplayFormat format)
+        {
+            WriteToConsole(GridConverter.Convert(grid), format);
+        }
         public static void WriteToFile(string file, BitGrid grid, Format format, bool appendFlag = false)
         {
             if ((format & Format.Info) != 0)

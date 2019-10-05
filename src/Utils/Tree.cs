@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 **/
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,10 +30,10 @@ using System.Threading.Tasks;
 
 namespace Matze.Utils
 {
-    class Tree 
+    class Tree
     {
         public Tree parent = null;
-        public Tree root => (parent != null)? parent.root : this;
+        public Tree root => (parent != null) ? parent.root : this;
 
         public bool IsConnected(Tree tree)
         {

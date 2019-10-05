@@ -26,6 +26,7 @@ using System;
 using System.Text;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 
 using Newtonsoft.Json;
 using Matze.Algorithms;
@@ -35,64 +36,115 @@ namespace Matze.Utils
 {
     public class Export
     {
-        static public byte[][] ToBytes(BitGrid bitgrid)
+        public enum Format
         {
-            var grid = bitgrid.Grid;
-            List<byte[]> bytes = new List<byte[]>();
-            foreach (var row in grid)
-            {
-                bytes.Add(row.SelectMany(i => BitConverter.GetBytes(i)).ToArray());
-            }
-            return bytes.ToArray();
+            Info = 1,
+            Yaml = 4,
+            Json = 6,
+            Txt = 8,
+            Csv = 16,
+            Binary = 32
         }
 
-        public static string ToString(BitGrid bitgrid,bool newLine = true)
+        public enum DisplayFormat
         {
-            var grid = bitgrid.Grid;
-            string str = "";
-            foreach (var row in grid)
+            ASCII = 4,
+            Bits = 8
+        };
+
+        public static void WriteToFile(string file, BitGrid grid, Format format, bool appendFlag = false)
+        {
+            if ((format & Format.Info) != 0)
             {
-                str += String.Join(';', row);
-                str += (newLine) ? "\n" : "|";
+                //to bites and ascii
             }
-            return str;
-        }
+            if ((format & Format.Json) != 0)
+            {
+                var filename = file + ".json";
+                WriteToFile(filename, appendFlag, (Stream stream) =>
+                 {
+                     Write(stream, Converter.ToJSON(grid));
+                 });
+            }
 
-        public static string ToCSV(BitGrid bitgrid){
-         return ToString(bitgrid);
-        }
-
-        public static string ToJSON(BitGrid grid){
-            return JsonConvert.SerializeObject(grid.Grid);
-        }
-
-        public static string ToYAML(BitGrid grid){
-            string export = "---\n";
-            foreach(var row in grid.Grid){
-                export += "- ";
-                var newRow = true;
-                foreach(var cell in row){
-                    export += ((newRow)? "":"\t")+"- "+cell+"\n";
-                    newRow = false;
+            if ((format & Format.Txt) != 0)
+            {
+                var filename = file + ".txt";
+                WriteToFile(filename, appendFlag, (Stream stream) =>
+                 {
+                     Write(stream, Converter.ToString(grid, false));
+                 });
+            }
+            if ((format & Format.Csv) != 0)
+            {
+                var filename = file + ".csv";
+                WriteToFile(filename, appendFlag, (Stream stream) =>
+                 {
+                     Write(stream, Converter.ToString(grid));
+                 });
+            }
+            if ((format & Format.Yaml) != 0)
+            {
+                var filename = file + ".yaml";
+                WriteToFile(filename, appendFlag, (Stream stream) =>
+                 {
+                     Write(stream, Converter.ToYAML(grid));
+                 });
+            }
+            if ((format & Format.Binary) != 0)
+            {
+                var filename = file + ".bin";
+                if (File.Exists(filename)) { File.Delete(filename); }
+                using (BinaryWriter writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
+                {
+                    var byteGrid = Converter.ToBytes(grid);
+                    writer.Write(grid.Width);
+                    writer.Write(grid.Height);
+                    foreach (var row in byteGrid)
+                    {
+                        writer.Write(row);
+                    }
                 }
             }
-            return export;
+
+
         }
-    
-        public static string ToString(CellGrid grid,bool newline = true){
-            return ToString(GridConverter.ToBitGrid(grid),newline);
+        public static void WriteToConsole(BitGrid grid, DisplayFormat format)
+        {
+            if ((format & DisplayFormat.ASCII) != 0)
+            {
+                WriteLine(Console.OpenStandardOutput(), Converter.ToASCII(grid));
+            }
+
+            if ((format & DisplayFormat.Bits) != 0)
+            {
+                WriteLine(Console.OpenStandardOutput(), Converter.ToBits(grid));
+            }
+
         }
-        public static string ToCSV(CellGrid grid){
-            return ToCSV(GridConverter.ToBitGrid(grid));
+
+
+        ///////////////////////////////////////////////////////////////////////////////////
+        ////////// Internal helpers
+        ///////////////////////////////////////////////////////////////////////////////////
+
+        private static void WriteToFile(string filename, bool appendFlag, Action<Stream> action)
+        {
+            if (File.Exists(filename) && !appendFlag) { File.Delete(filename); }
+            using (FileStream stream = File.Create(filename))
+            {
+                action(stream);
+            }
         }
-        public static string ToJSON(CellGrid grid){
-            return ToJSON(GridConverter.ToBitGrid(grid));
+        private static void Write(Stream stream, string str)
+        {
+            var bytes = Encoding.ASCII.GetBytes(str);
+            stream.Write(bytes, 0, bytes.Length);
         }
-        public static string ToYAML(CellGrid grid){
-            return ToYAML(GridConverter.ToBitGrid(grid));
-        }
-        public static byte[][] ToBytes(CellGrid grid){
-            return ToBytes(GridConverter.ToBitGrid(grid));
+        private static void WriteLine(Stream stream, string str)
+        {
+            var bytes = Encoding.ASCII.GetBytes(str + "\n");
+            stream.Write(bytes, 0, bytes.Length);
         }
     }
 }

@@ -32,7 +32,7 @@ using Matze.Utils;
 
 namespace Matze.Grids
 {
-    public class BitGrid  : GridList<int>,IGrid
+    public class BitGrid : GridList<int>
     {
         public BitGrid(int width, int height)
         {

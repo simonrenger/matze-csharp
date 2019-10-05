@@ -1,11 +1,17 @@
 using System.Collections.Generic;
 using Matze.Utils;
 
-namespace Matze.Grids{
-    public interface IGrid{}
+namespace Matze.Grids
+{
+    public interface IGrid { }
 
-    public abstract class GridList<T>{
-         protected List<List<T>> grid;
+    public interface IIndexable<TKey, TVal>
+    {
+        TVal this[TKey key] { get; }
+    }
+    public abstract class GridList<T> : IGrid
+    {
+        protected List<List<T>> grid;
 
         public List<T> this[int index]
         {

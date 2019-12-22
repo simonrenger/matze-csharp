@@ -53,7 +53,3 @@ var output = Export.ToJSON(grid);
 var newGrid = Import.ParseJson(output);
 Writer.ToDisk(newGrid, file,Format.Json);
 ```
-
-
-
-## API

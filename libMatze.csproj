@@ -5,12 +5,31 @@
     <AssemblyName>libMatze</AssemblyName>
     <OutputPath>bin/$(Configuration)/</OutputPath>
     <IntermediateOutputPath>obj/$(Configuration)/</IntermediateOutputPath>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFrameworks>netcoreapp2.2</TargetFrameworks>
     <BuildInParallel>true</BuildInParallel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
 
+  
+  <PropertyGroup>
+    <OutputType>library</OutputType>
+    <AssemblyName>libMatze</AssemblyName>
+    <OutputPath>bin/$(Configuration)/</OutputPath>
+    <IntermediateOutputPath>obj/$(Configuration)/</IntermediateOutputPath>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <BuildInParallel>true</BuildInParallel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+ <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+<Reference  Include="System.Runtime.WindowsRuntime">
+    <SpecificVersion>False</SpecificVersion>
+    <HintPath>$(MSBuildProgramFiles32)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5\System.Runtime.WindowsRuntime.dll</HintPath>
+  </Reference>
+  
+</ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>

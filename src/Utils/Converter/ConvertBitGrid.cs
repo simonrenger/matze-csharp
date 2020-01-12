@@ -53,7 +53,7 @@ namespace Matze.Utils
             string str = "";
             foreach (var row in grid)
             {
-                str += String.Join(';', row);
+                str += String.Join(";", row.Select(x => x.ToString()).ToArray());
                 str += (newLine) ? "\n" : "|";
             }
             return str;
